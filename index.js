@@ -4,7 +4,7 @@ EXPONENT_CSS_BODY_STYLES.mount(document.head);
 
 async function main() {
   const container = new Panel().setId("container").mount(document.body);
-  const title = new Text().setTextContent("Hello World").mount(container);
+  const title = new Text().setId("title").setTextContent("netgame").mount(container);
 }
 
 main();
