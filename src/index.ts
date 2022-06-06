@@ -6,6 +6,8 @@ import {
   Text
 } from "@repcomm/exponent-ts"
 
+import { connect } from "./net/client.js";
+
 EXPONENT_CSS_STYLES.mount(document.head);
 EXPONENT_CSS_BODY_STYLES.mount(document.head);
 
@@ -20,6 +22,8 @@ async function main() {
     .setTextContent("netgame")
     .mount(container);
 
+  
+  connect();
   
 }
 
