@@ -1,19 +1,15 @@
-# ts-map-babel-template
+# grouppuffle
 
-A template setup for:
-- TypeScript ( using [babel](https://github.com/babel/babel) )
-- import maps ( including [this polyfill](https://github.com/guybedford/es-module-shims) )
-- And also optionally [show-casing exponent-ts](https://github.com/RepComm/exponent-ts)
+Decentralized multiplayer, 2d vector graphics, sandbox MMO.
 
-## Function
+## Hosting
+Requires node js runtime
 
-Compile /src directory with:
-`npm run build`
-<br/>
-File copy is set up as well for:
-`src/index.ts` -> `./index.js`<br/>
-`src/index.html` -> `./index.html`
+GitIgnore is not configured for ignoring node_modules, which means you do not have to run `npm install`
 
-Output is in the same directory as package.json for sake of import maps
+Run `npm run start` in your terminal
 
-I regularly use this for starting new projects of my own, and therefor it should stay somewhat up-to-date.
+## Joining
+Open URL revealed in terminal in your web browser
+
+![img](./src/textures/ship.svg)
