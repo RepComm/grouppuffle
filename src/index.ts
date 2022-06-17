@@ -19,12 +19,26 @@ async function main() {
     .mount(document.body);
   
   const renderer = new SVGPanel()
-  // .setAttr("viewBox", "0 0 338.667 190.50019")
   .mount(container);
 
   SVGPanel.load("./textures/ship.svg", true, false).then((svgPanel)=>{
     svgPanel.mount(renderer);
-    // container.mountChild(svgPanel as any);
+  });
+
+  SVGPanel.load("./textures/map-icon.svg", true).then((mapIcon)=>{
+    setTimeout(()=>{
+      mapIcon.mount(renderer);
+      mapIcon.on("mouseenter", (evt)=>{
+        mapIcon.setStyleItem("border-style", "solid white");
+        mapIcon.setStyleItem("border-width", "2pt");
+      });
+      mapIcon.on("mouseleave", (evt)=>{
+        mapIcon.setStyleItem("border-style", "unset");
+        mapIcon.setStyleItem("border-width", "1pt");
+      });
+      
+      mapIcon.transform.setTranslate(5, 20);
+    }, 1000);
   });
 
   connect();

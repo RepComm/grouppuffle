@@ -1,8 +1,10 @@
 
-import { Exponent } from "@repcomm/exponent-ts";
+import { Component, Exponent } from "@repcomm/exponent-ts";
 
 export class SVGPanel extends Exponent {
   
+  //@ts-ignore
+  element: SVGSVGElement|SVGGElement;
 
   constructor (element?: SVGSVGElement|SVGElement) {
     super();
@@ -17,29 +19,53 @@ export class SVGPanel extends Exponent {
       this.useNative(element as any);
     }
     
-    console.log(this.element);
+    // console.log(this.element);
     if (this.element?.nodeName.toLowerCase() == "svg") {
       this.addClasses("svgpanel");
       
       let fixSize = ()=>{
+        let x = 0;
+        let y = 0;
         let w = Math.floor(this.rect.width);
         let h = Math.floor(this.rect.height);
-        this.setAttr("width", w);
-        this.setAttr("height", h);
         
-        this.setAttr("viewbox", `0 0 ${w} ${h}`);
+        let helperViewBox = (this.element as any as SVGSVGElement).getElementById("helperViewBox") as SVGRectElement;
+        // console.log(helperViewBox);
+        if (helperViewBox) {
+          helperViewBox.style.display = "unset";
+          let r = helperViewBox.getBBox();
+          w = Math.floor(r.width);
+          h = Math.floor(r.height);
+          x = Math.floor(r.x);
+          y = Math.floor(r.y);
+          helperViewBox.style.display = "none";
+        }
+
+        this.setAttr("width", "100%");
+        // this.setAttr("height", h);
+        this.setAttr("height", "100%");
         
-        console.log("fix size");
+        this.setAttr("viewBox", `${x} ${y} ${w} ${h}`);
+        
+        // console.log("fix size");
       };
       
       window.addEventListener("resize", ()=>{fixSize()});
-      setTimeout(()=>{fixSize()}, 250);
+
+      //gross, fix later
+      setInterval(()=>{
+        fixSize();
+      }, 1000);
       
     }
     
   }
   setAttr(name: string, value: any): this {
     this.element?.setAttribute(name, value);
+    return this;
+  }
+  setAttrNS (name: string, value: any): this {
+    this.element?.setAttributeNS(this.element.namespaceURI, name, value);
     return this;
   }
   static load (url: string, replaceWithGroup: boolean = false, debugLog: boolean = false): Promise<SVGPanel> {
@@ -83,5 +109,17 @@ export class SVGPanel extends Exponent {
       if (debugLog) console.log("resolving", result);
       _resolve(result);
     });
+  }
+  mount(parent: Component | HTMLElement | SVGGElement | SVGSVGElement | SVGPanel): this {
+    //@ts-ignore
+    return super.mount(parent);
+  }
+  get transform (): SVGTransform {
+    let baseVal = this.element.transform.baseVal;
+    if (baseVal.numberOfItems < 1) {
+      let newSVGTransform = document.createElementNS("http://www.w3.org/2000/svg", "svg").createSVGTransform();
+      baseVal.appendItem( newSVGTransform );
+    }
+    return baseVal.getItem(0);
   }
 }
