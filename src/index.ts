@@ -5,6 +5,7 @@ import {
   Panel,
   Text
 } from "@repcomm/exponent-ts"
+import { SVGPanel } from "./components/svg.js";
 
 import { connect } from "./net/client.js";
 
@@ -16,14 +17,18 @@ async function main() {
   const container = new Panel()
     .setId("container")
     .mount(document.body);
-
-  const title = new Text()
-    .setId("title")
-    .setTextContent("netgame")
-    .mount(container);
-
   
+  const renderer = new SVGPanel()
+  // .setAttr("viewBox", "0 0 338.667 190.50019")
+  .mount(container);
+
+  SVGPanel.load("./textures/ship.svg", true, false).then((svgPanel)=>{
+    svgPanel.mount(renderer);
+    // container.mountChild(svgPanel as any);
+  });
+
   connect();
+
   
 }
 
